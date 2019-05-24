@@ -12,10 +12,12 @@ namespace ConsoleTestApp
         {
             System.Console.WriteLine("Testing...");
 
-            TestLoadPeople.LoadPeople();
+            TestLoading.Load();
+            TestGetFinancialEntities.GetFinancialEntities();
 
             System.Console.WriteLine("Testing complete!");
 
+            Console.ReadLine();
         }
     }
 }
