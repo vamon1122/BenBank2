@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenBank2", "BenBank2\BenBank2.csproj", "{E431E9BD-C0A3-4A8F-89D5-F4BF75FCFD9C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenBank2Data", "BenBank2Data\BenBank2Data.csproj", "{727FD00F-18AA-43B6-A3F5-F2819A636A65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{F972056E-D48F-44DE-A19F-9259E822AA59}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{E431E9BD-C0A3-4A8F-89D5-F4BF75FCFD9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E431E9BD-C0A3-4A8F-89D5-F4BF75FCFD9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E431E9BD-C0A3-4A8F-89D5-F4BF75FCFD9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{727FD00F-18AA-43B6-A3F5-F2819A636A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{727FD00F-18AA-43B6-A3F5-F2819A636A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{727FD00F-18AA-43B6-A3F5-F2819A636A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{727FD00F-18AA-43B6-A3F5-F2819A636A65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F972056E-D48F-44DE-A19F-9259E822AA59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F972056E-D48F-44DE-A19F-9259E822AA59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F972056E-D48F-44DE-A19F-9259E822AA59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F972056E-D48F-44DE-A19F-9259E822AA59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
