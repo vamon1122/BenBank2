@@ -36,7 +36,7 @@ namespace BenBank2Data
            
         }
 
-        internal abstract void SendFunds(double ammount);
+        internal abstract void TakeFunds(double ammount);
         internal abstract void RecieveFunds(double ammount);
     }
 
@@ -63,14 +63,53 @@ namespace BenBank2Data
         public string Forename { get; set; }
         public string Surname { get; set; }
 
-        internal override void SendFunds(double ammount)
+        
+
+        internal override void TakeFunds(double pAmmount)
         {
-            throw new NotImplementedException();
+            
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var SendFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
+                    SendFunds.Parameters.Add(new SqlParameter("person_id", Id));
+                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - pAmmount));
+
+                    SendFunds.ExecuteNonQuery();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance -= pAmmount;
         }
 
         internal override void RecieveFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var RecieveFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
+                    RecieveFunds.Parameters.Add(new SqlParameter("person_id", Id));
+                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    RecieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance += ammount;
         }
     }
 
@@ -95,14 +134,50 @@ namespace BenBank2Data
 
         public override string Name { get; set; }
 
-        internal override void SendFunds(double ammount)
+        internal override void TakeFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var SendFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
+                    SendFunds.Parameters.Add(new SqlParameter("business_id", Id));
+                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+
+                    SendFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance -= ammount;
         }
 
         internal override void RecieveFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var RecieveFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
+                    RecieveFunds.Parameters.Add(new SqlParameter("business_id", Id));
+                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    RecieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance += ammount;
         }
     }
 
@@ -122,14 +197,50 @@ namespace BenBank2Data
         public double VAT { get; set; }
         public double IncomeTax { get; set; }
 
-        internal override void SendFunds(double ammount)
+        internal override void TakeFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var SendFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
+                    SendFunds.Parameters.Add(new SqlParameter("government_id", Id));
+                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+
+                    SendFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance -= ammount;
         }
 
         internal override void RecieveFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var RecieveFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
+                    RecieveFunds.Parameters.Add(new SqlParameter("government_id", Id));
+                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    RecieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance += ammount;
         }
     }
 
@@ -150,14 +261,50 @@ namespace BenBank2Data
 
         public override string Name { get { return string.Format("{0}'s bank account", AccountHolder.Name); } set { } }
 
-        internal override void SendFunds(double ammount)
+        internal override void TakeFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var SendFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
+                    SendFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
+                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+
+                    SendFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance -= ammount;
         }
 
         internal override void RecieveFunds(double ammount)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var RecieveFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
+                    RecieveFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
+                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    RecieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Balance += ammount;
         }
 
     }

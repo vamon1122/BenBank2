@@ -8,18 +8,18 @@ using BenBank2Data;
 
 namespace ConsoleTestApp
 {
-    public static class TestLoading
+    public static class TestLoadFromDb
     {
         public static void Load()
         {
-            Console.WriteLine("Testing loading...");
+            CC.Info.WriteLine("Loading entities from the database...");
             DateTime start = DateTime.Now;
             DataStore.LoadGovernments();
             DataStore.LoadPeople();
             DataStore.LoadBusinesses();
             DataStore.LoadBanks();
             DataStore.LoadBankAccounts();
-            Console.WriteLine(string.Format("Loaded in {0} second(s)", ((double)(DateTime.Now - start).Milliseconds / 1000).ToString("0.000")));
+            CC.Info.WriteLine(string.Format("Loaded in {0} second(s)", ((double)(DateTime.Now - start).Milliseconds / 1000).ToString("0.000")));
         }
     }
 }
