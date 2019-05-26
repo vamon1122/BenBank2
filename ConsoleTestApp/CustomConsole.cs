@@ -41,6 +41,32 @@ namespace ConsoleTestApp
                 Console.ResetColor();
             }
         }
+
+        public static void Title(string value)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("///////////"); //10
+            foreach(char character in value)
+            {
+                Console.Write("/");
+            }
+            Console.WriteLine("///////////"); //10
+
+            Console.Write("////////// "); //10
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.BackgroundColor = ConsoleColor.DarkMagenta;
+            Console.Write(value);
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine(" //////////"); //10
+            Console.Write("///////////"); //10
+            foreach (char character in value)
+            {
+                Console.Write("/");
+            }
+            Console.WriteLine("///////////"); //10
+            Console.ResetColor();
+        }
         
     }
 }

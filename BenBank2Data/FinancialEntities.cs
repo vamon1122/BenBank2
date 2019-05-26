@@ -16,13 +16,13 @@ namespace BenBank2Data
         public abstract string Name { get; set; }
         public double Balance { get; set; }
 
-        public void Pay(FinancialEntity pRecipient, double pAmmount)
+        public void Pay(FinancialEntity recipient, double ammount)
         {
             Transaction MyTransaction = new Transaction()
             {
                 Sender = this,
-                Recipient = pRecipient,
-                Ammount = pAmmount
+                Recipient = recipient,
+                Ammount = ammount
             };
 
             try
@@ -42,19 +42,19 @@ namespace BenBank2Data
 
     public class Person : FinancialEntity
     {
-        public Person(SqlDataReader pReader)
+        public Person(SqlDataReader reader)
         {
-            Id = (Guid)pReader[0];
-            Debug.WriteLine(pReader[0]);
-            Debug.WriteLine(pReader[1]);
+            Id = (Guid)reader[0];
+            Debug.WriteLine(reader[0]);
+            Debug.WriteLine(reader[1]);
             foreach(Government g in DataStore.Governments)
             {
                 Debug.WriteLine(string.Format("Id = {0} name = {1}", g.Id, g.Name));
             }
-            PersonGovernment = DataStore.Governments.First(x => x.Id == (Guid)pReader[1]);
-            Forename = pReader[2].ToString().Trim();
-            Surname = pReader[3].ToString().Trim();
-            Balance = Convert.ToDouble(pReader[4]);
+            PersonGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Forename = reader[2].ToString().Trim();
+            Surname = reader[3].ToString().Trim();
+            Balance = Convert.ToDouble(reader[4]);
             Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, PersonGovernment.Name, Balance.ToString("£0.00")));
         }
 
@@ -63,9 +63,7 @@ namespace BenBank2Data
         public string Forename { get; set; }
         public string Surname { get; set; }
 
-        
-
-        internal override void TakeFunds(double pAmmount)
+        internal override void TakeFunds(double ammount)
         {
             
             try
@@ -74,11 +72,11 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var SendFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
-                    SendFunds.Parameters.Add(new SqlParameter("person_id", Id));
-                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - pAmmount));
+                    var TakeFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
+                    TakeFunds.Parameters.Add(new SqlParameter("person_id", Id));
+                    TakeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
 
-                    SendFunds.ExecuteNonQuery();
+                    TakeFunds.ExecuteNonQuery();
                 }
             }
             catch(Exception ex)
@@ -86,7 +84,7 @@ namespace BenBank2Data
                 throw ex;
             }
 
-            Balance -= pAmmount;
+            Balance -= ammount;
         }
 
         internal override void RecieveFunds(double ammount)
@@ -121,12 +119,12 @@ namespace BenBank2Data
 
         }
 
-        public Business(SqlDataReader pReader)
+        public Business(SqlDataReader reader)
         {
-            Id = (Guid)pReader[0];
-            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)pReader[1]);
-            Name = pReader[2].ToString().Trim();
-            Balance = Convert.ToDouble(pReader[3]);
+            Id = (Guid)reader[0];
+            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Name = reader[2].ToString().Trim();
+            Balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, BusinessGovernment.Name, Balance.ToString("£0.00")));
         }
 
@@ -183,13 +181,13 @@ namespace BenBank2Data
 
     public class Government : FinancialEntity
     {
-        public Government(SqlDataReader pReader)
+        public Government(SqlDataReader reader)
         {
-            Id = (Guid)pReader[0];
-            Name = pReader[1].ToString().Trim();
-            Balance = Convert.ToDouble(pReader[2]);
-            VAT = Convert.ToDouble(pReader[3]);
-            IncomeTax = Convert.ToDouble(pReader[4]);
+            Id = (Guid)reader[0];
+            Name = reader[1].ToString().Trim();
+            Balance = Convert.ToDouble(reader[2]);
+            VAT = Convert.ToDouble(reader[3]);
+            IncomeTax = Convert.ToDouble(reader[4]);
             Debug.WriteLine(string.Format("{0} government was loaded. It's Id = {1}. It's balance is {2}. It's VAT is = {3}%. It's Income Tax = {4}%", Name, Id, Balance.ToString("£0.00"), VAT, IncomeTax));
         }
 
@@ -246,12 +244,12 @@ namespace BenBank2Data
 
     public class BankAccount : FinancialEntity
     {
-        public BankAccount(SqlDataReader pReader)
+        public BankAccount(SqlDataReader reader)
         {
-            Id = (Guid)pReader[0];
-            AccountBank = DataStore.Banks.First(x => x.Id == (Guid)pReader[1]);
-            AccountHolder = DataStore.FinancialEntities.First(x => x.Id == (Guid)pReader[2]);
-            Balance = Convert.ToDouble(pReader[3]);
+            Id = (Guid)reader[0];
+            AccountBank = DataStore.Banks.First(x => x.Id == (Guid)reader[1]);
+            AccountHolder = DataStore.FinancialEntities.First(x => x.Id == (Guid)reader[2]);
+            Balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("bank account was loaded. It's Id = {0}. It's bank is = {1}. It's account holder = {2}. It's balance is {3}.",  Id, AccountBank.Name, AccountHolder.Name, Balance.ToString("£0.00")));
         }
 
@@ -306,20 +304,18 @@ namespace BenBank2Data
 
             Balance += ammount;
         }
-
     }
 
     public class Bank : Business
     {
-
-        public Bank(SqlDataReader pReader) 
+        public Bank(SqlDataReader reader) 
         {
-            Id = (Guid)pReader[0];
-            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)pReader[1]);
-            Name = pReader[2].ToString().Trim();
-            Balance = Convert.ToDouble(pReader[3]);
-            PositiveInterest = Convert.ToDouble(pReader[4]);
-            NegativeInterest = Convert.ToDouble(pReader[5]);
+            Id = (Guid)reader[0];
+            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Name = reader[2].ToString().Trim();
+            Balance = Convert.ToDouble(reader[3]);
+            PositiveInterest = Convert.ToDouble(reader[4]);
+            NegativeInterest = Convert.ToDouble(reader[5]);
             Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, BusinessGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
         }
 

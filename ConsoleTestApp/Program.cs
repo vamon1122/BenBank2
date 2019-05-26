@@ -14,7 +14,7 @@ namespace ConsoleTestApp
 
             TestLoadFromDb.Load();
             TestGetFinancialEntities.GetFinancialEntities();
-            TestPayments.PersonPayBusiness();
+            TestPayments.DoTestPayments();
 
             System.Console.WriteLine("Testing complete!");
 
