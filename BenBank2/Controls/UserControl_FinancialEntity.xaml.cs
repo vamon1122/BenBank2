@@ -14,23 +14,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BenBank2Data;
 
-namespace BenBank2
+namespace BenBank2.Controls
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for UserControl_FinancialEntity.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class UserControl_FinancialEntity : UserControl
     {
-        public MainWindow()
+        public UserControl_FinancialEntity(FinancialEntity financialEntity)
         {
-            DataStore.LoadFromDb();
-
             InitializeComponent();
-
-            foreach (FinancialEntity fe in DataStore.FinancialEntities)
-            {
-                StackPanel_FinancialEntities.Children.Add(new Controls.UserControl_FinancialEntity(fe));
-            }
+            FinancialEntity_Name.Text = financialEntity.Name;
+            FinancialEntity_Balance.Text = financialEntity.Balance.ToString("£0.00");
         }
     }
 }

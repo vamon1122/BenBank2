@@ -32,8 +32,11 @@ namespace BenBank2Data
         public static List<Person> People;
         public static List<Transaction> Transactions;
         public static List<BankAccount> BankAccounts;
-        public static List<FinancialEntity> FinancialEntities { get{ 
-            var financialEntities = new List<FinancialEntity>();
+        public static List<FinancialEntity> FinancialEntities
+        {
+            get
+            { 
+                var financialEntities = new List<FinancialEntity>();
                 financialEntities.AddRange(Banks);
                 financialEntities.AddRange(Businesses);
                 financialEntities.AddRange(Governments);
@@ -41,10 +44,23 @@ namespace BenBank2Data
                 financialEntities.AddRange(BankAccounts);
 
                 return financialEntities;
-            } }
+            }
+        }
 
+        public static void LoadFromDb()
+        {
+            Debug.WriteLine("Loading entities from the database...");
+            DateTime start = DateTime.Now;
+            DataStore.LoadGovernments();
+            DataStore.LoadPeople();
+            DataStore.LoadBusinesses();
+            DataStore.LoadBanks();
+            DataStore.LoadBankAccounts();
+            var timeTaken = (double)(DateTime.Now - start).Milliseconds / 1000;
+            Debug.WriteLine(string.Format("Loaded in {0} second(s)", timeTaken.ToString("0.000")));
+        }
 
-        public static void LoadGovernments()
+        private static void LoadGovernments()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -66,7 +82,7 @@ namespace BenBank2Data
             }
         }
 
-        public static void LoadPeople()
+        private static void LoadPeople()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -86,7 +102,7 @@ namespace BenBank2Data
             }
         }
 
-        public static void LoadBusinesses()
+        private static void LoadBusinesses()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -106,7 +122,7 @@ namespace BenBank2Data
             }
         }
 
-        public static void LoadBanks()
+        private static void LoadBanks()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -126,7 +142,7 @@ namespace BenBank2Data
             }
         }
 
-        public static void LoadBankAccounts()
+        private static void LoadBankAccounts()
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {

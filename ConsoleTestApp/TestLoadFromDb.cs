@@ -15,11 +15,7 @@ namespace ConsoleTestApp
             CC.Title("Load all data from the database");
             CC.Info.WriteLine("Loading entities from the database...");
             DateTime start = DateTime.Now;
-            DataStore.LoadGovernments();
-            DataStore.LoadPeople();
-            DataStore.LoadBusinesses();
-            DataStore.LoadBanks();
-            DataStore.LoadBankAccounts();
+            DataStore.LoadFromDb();
             CC.Info.WriteLine(string.Format("Loaded in {0} second(s)", ((double)(DateTime.Now - start).Milliseconds / 1000).ToString("0.000")));
         }
     }
