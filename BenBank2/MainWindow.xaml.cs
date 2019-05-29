@@ -29,29 +29,61 @@ namespace BenBank2
 
             InitializeComponent();
 
+            RefreshFinancialEntities();
+            
+        }
+
+        private void RefreshFinancialEntities()
+        {
+            ListBox_Payers.Items.Clear();
+            ListBox_Payee.Items.Clear();
+
             foreach (FinancialEntity fe in DataStore.FinancialEntities)
             {
-                ListBox_FinancialEntities.Items.Add(new Controls.UserControl_FinancialEntity(fe));
+                ListBox_Payers.Items.Add(new Controls.UserControl_FinancialEntity(fe));
+            }
+
+            foreach (FinancialEntity fe in DataStore.FinancialEntities)
+            {
+                ListBox_Payee.Items.Add(new Controls.UserControl_FinancialEntity(fe));
             }
         }
 
         private void Button_Pay_Click(object sender, RoutedEventArgs e)
         {
-            double TextBoxAmmount;
+            double Ammount = 0;
 
             if (ValidateTextBoxAmmount())
             {
-                foreach(UserControl_FinancialEntity control in ListBox_FinancialEntities.SelectedItems)
+                int i = 0;
+                foreach(UserControl_FinancialEntity control in ListBox_Payers.SelectedItems)
                 {
-                    Debug.WriteLine(string.Format("Financial entity \"{0}\" was selected. It has {1}", control.MyFinancialEntity.Name, control.MyFinancialEntity.Balance.ToString("£0.00")));
+                    i++;
+                    Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" was selected. It has {3}",i, ListBox_Payers.SelectedItems.Count, control.MyFinancialEntity.Name, control.MyFinancialEntity.Balance.ToString("£0.00")));
                 }
+
+                Debug.WriteLine(string.Format("Payee \"{0}\" was selected. It has {1}", ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity.Name, ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity.Balance.ToString("£0.00")));
+
+                i = 0;
+                foreach (UserControl_FinancialEntity control in ListBox_Payers.SelectedItems)
+                {
+                    i++;
+                    Transaction transaction = new Transaction();
+                    transaction.Sender = control.MyFinancialEntity;
+                    transaction.Recipient = ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity;
+                    transaction.Ammount = Ammount;
+                    transaction.DoTransaction();
+                    Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" payed payee \"{3}\" {4}. {2} now has {5}", i, ListBox_Payers.SelectedItems.Count, transaction.Sender.Name, transaction.Recipient.Name, Ammount.ToString("£0.00"), transaction.Sender.Balance));
+                }
+                RefreshFinancialEntities();
+
             }
 
             bool ValidateTextBoxAmmount()
             {
                 try
                 {
-                    TextBoxAmmount = Convert.ToDouble(TextBox_Ammount.Text);
+                    Ammount = Convert.ToDouble(TextBox_Ammount.Text);
                 }
                 catch
                 {

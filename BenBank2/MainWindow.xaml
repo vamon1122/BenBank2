@@ -8,15 +8,21 @@
         Title="MainWindow" MinHeight="600" Height="600" MinWidth="800" MaxWidth="800" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="531"></ColumnDefinition>
+            <ColumnDefinition Width="281"></ColumnDefinition>
+            <ColumnDefinition Width="281"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ScrollViewer Width="531">
-            <ListBox Name="ListBox_FinancialEntities" SelectionMode="Extended">
+        <ScrollViewer Width="281">
+            <ListBox Name="ListBox_Payers" SelectionMode="Extended">
 
             </ListBox>
         </ScrollViewer>
-        <Grid Grid.Column="1">
+        <ScrollViewer Width="281" Grid.Column="1">
+            <ListBox Name="ListBox_Payee">
+
+            </ListBox>
+        </ScrollViewer>
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"></RowDefinition>
                 <RowDefinition></RowDefinition>
