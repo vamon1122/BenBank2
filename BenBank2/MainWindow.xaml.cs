@@ -36,7 +36,7 @@ namespace BenBank2
         private void RefreshFinancialEntities()
         {
             ListBox_Payers.Items.Clear();
-            ListBox_Payee.Items.Clear();
+            ListBox_Payees.Items.Clear();
 
             foreach (FinancialEntity fe in DataStore.FinancialEntities)
             {
@@ -45,7 +45,7 @@ namespace BenBank2
 
             foreach (FinancialEntity fe in DataStore.FinancialEntities)
             {
-                ListBox_Payee.Items.Add(new Controls.UserControl_FinancialEntity(fe));
+                ListBox_Payees.Items.Add(new Controls.UserControl_FinancialEntity(fe));
             }
         }
 
@@ -55,25 +55,39 @@ namespace BenBank2
 
             if (ValidateTextBoxAmmount())
             {
-                int i = 0;
-                foreach(UserControl_FinancialEntity control in ListBox_Payers.SelectedItems)
+                int PayerNo = 0;
+                foreach (UserControl_FinancialEntity payer in ListBox_Payers.SelectedItems)
                 {
-                    i++;
-                    Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" was selected. It has {3}",i, ListBox_Payers.SelectedItems.Count, control.MyFinancialEntity.Name, control.MyFinancialEntity.Balance.ToString("£0.00")));
+                    PayerNo++;
+                    Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" was selected. It has {3}",PayerNo, ListBox_Payers.SelectedItems.Count, payer.MyFinancialEntity.Name, payer.MyFinancialEntity.Balance.ToString("£0.00")));
                 }
 
-                Debug.WriteLine(string.Format("Payee \"{0}\" was selected. It has {1}", ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity.Name, ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity.Balance.ToString("£0.00")));
-
-                i = 0;
-                foreach (UserControl_FinancialEntity control in ListBox_Payers.SelectedItems)
+                int PayeeNo = 0;
+                foreach (UserControl_FinancialEntity payee in ListBox_Payers.SelectedItems)
                 {
-                    i++;
-                    Transaction transaction = new Transaction();
-                    transaction.Sender = control.MyFinancialEntity;
-                    transaction.Recipient = ((UserControl_FinancialEntity)ListBox_Payee.SelectedItem).MyFinancialEntity;
-                    transaction.Ammount = Ammount;
-                    transaction.DoTransaction();
-                    Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" payed payee \"{3}\" {4}. {2} now has {5}", i, ListBox_Payers.SelectedItems.Count, transaction.Sender.Name, transaction.Recipient.Name, Ammount.ToString("£0.00"), transaction.Sender.Balance));
+                    PayeeNo++;
+                    Debug.WriteLine(string.Format("Payee {0}/{1} \"{2}\" was selected. It has {3}", PayeeNo, ListBox_Payees.SelectedItems.Count, payee.MyFinancialEntity.Name, payee.MyFinancialEntity.Balance.ToString("£0.00")));
+                }
+
+                Debug.WriteLine(string.Format("Payee \"{0}\" was selected. It has {1}", ((UserControl_FinancialEntity)ListBox_Payees.SelectedItem).MyFinancialEntity.Name, ((UserControl_FinancialEntity)ListBox_Payees.SelectedItem).MyFinancialEntity.Balance.ToString("£0.00")));
+
+                PayerNo = 0;
+                PayeeNo = 0;
+                foreach (UserControl_FinancialEntity payer in ListBox_Payers.SelectedItems)
+                {
+                    PayerNo++;
+                    foreach (UserControl_FinancialEntity payee in ListBox_Payees.SelectedItems)
+                    {
+                        PayeeNo++;
+                        Transaction transaction = new Transaction();
+                        transaction.Sender = payer.MyFinancialEntity;
+                        transaction.Recipient = payee.MyFinancialEntity;
+                        transaction.Ammount = Ammount;
+                        transaction.DoTransaction();
+                        Debug.WriteLine(string.Format("Payer {0}/{1} \"{2}\" payed payee {3}/{4} \"{5}\" {6}. {2} now has {7}", PayerNo, ListBox_Payers.SelectedItems.Count, transaction.Sender.Name, PayeeNo, ListBox_Payees.SelectedItems.Count ,transaction.Recipient.Name, Ammount.ToString("£0.00"), transaction.Sender.Balance.ToString("£0.00")));
+                    }
+                    PayeeNo = 0;
+                    
                 }
                 RefreshFinancialEntities();
 

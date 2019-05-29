@@ -18,7 +18,7 @@
             </ListBox>
         </ScrollViewer>
         <ScrollViewer Width="281" Grid.Column="1">
-            <ListBox Name="ListBox_Payee">
+            <ListBox Name="ListBox_Payees" SelectionMode="Extended">
 
             </ListBox>
         </ScrollViewer>
