@@ -21,9 +21,14 @@ namespace BenBank2.Controls
     /// </summary>
     public partial class UserControl_FinancialEntity : UserControl
     {
+        public FinancialEntity MyFinancialEntity;
+
         public UserControl_FinancialEntity(FinancialEntity financialEntity)
         {
+            MyFinancialEntity = financialEntity;
+
             InitializeComponent();
+
             FinancialEntity_Name.Text = financialEntity.Name;
             FinancialEntity_Balance.Text = financialEntity.Balance.ToString("£0.00");
         }

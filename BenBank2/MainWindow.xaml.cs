@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BenBank2Data;
+using BenBank2.Controls;
+using System.Diagnostics;
 
 namespace BenBank2
 {
@@ -29,7 +31,33 @@ namespace BenBank2
 
             foreach (FinancialEntity fe in DataStore.FinancialEntities)
             {
-                StackPanel_FinancialEntities.Children.Add(new Controls.UserControl_FinancialEntity(fe));
+                ListBox_FinancialEntities.Items.Add(new Controls.UserControl_FinancialEntity(fe));
+            }
+        }
+
+        private void Button_Pay_Click(object sender, RoutedEventArgs e)
+        {
+            double TextBoxAmmount;
+
+            if (ValidateTextBoxAmmount())
+            {
+                foreach(UserControl_FinancialEntity control in ListBox_FinancialEntities.SelectedItems)
+                {
+                    Debug.WriteLine(string.Format("Financial entity \"{0}\" was selected. It has {1}", control.MyFinancialEntity.Name, control.MyFinancialEntity.Balance.ToString("£0.00")));
+                }
+            }
+
+            bool ValidateTextBoxAmmount()
+            {
+                try
+                {
+                    TextBoxAmmount = Convert.ToDouble(TextBox_Ammount.Text);
+                }
+                catch
+                {
+                    return false;
+                }
+                return true;
             }
         }
     }

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:BenBank2.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="800">
+             d:DesignHeight="200" d:DesignWidth="800" BorderThickness="5" BorderBrush="Firebrick" Margin="0,0,0,0" Width="500">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -16,7 +16,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Name="FinancialEntity_Name" FontSize="50" TextAlignment="Center"></TextBlock>
-        <TextBlock Grid.Column="1" Grid.Row="1" Name="FinancialEntity_Balance" FontSize="50" TextAlignment="Center"></TextBlock>
+        <TextBlock Grid.Column="1" Name="FinancialEntity_Name" FontSize="25" TextAlignment="Center"></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="1" Name="FinancialEntity_Balance" FontSize="25" TextAlignment="Center"></TextBlock>
     </Grid>
 </UserControl>
