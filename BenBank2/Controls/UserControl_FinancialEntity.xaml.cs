@@ -23,6 +23,28 @@ namespace BenBank2.Controls
     {
         public FinancialEntity MyFinancialEntity;
 
+        private bool _selected;
+        public bool Selected
+        {
+            get
+            {
+                return _selected;
+            }
+            set
+            {
+                if (value == true)
+                {
+                    Background = Brushes.Yellow;
+                }
+                else
+                {
+                    Background = Brushes.Transparent;
+                }
+                
+                _selected = value;
+            }
+        }
+
         public UserControl_FinancialEntity(FinancialEntity financialEntity)
         {
             MyFinancialEntity = financialEntity;

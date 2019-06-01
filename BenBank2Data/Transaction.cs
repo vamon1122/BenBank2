@@ -27,13 +27,13 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var InsertTransaction = new SqlCommand("INSERT INTO tb_transaction VALUES (@transaction_id, @sender_id, @recipient_id, @ammount)", conn);
-                    InsertTransaction.Parameters.Add(new SqlParameter("transaction_id", Id));
-                    InsertTransaction.Parameters.Add(new SqlParameter("sender_id", Sender.Id));
-                    InsertTransaction.Parameters.Add(new SqlParameter("recipient_id", Recipient.Id));
-                    InsertTransaction.Parameters.Add(new SqlParameter("ammount", Ammount));
+                    var insertTransaction = new SqlCommand("INSERT INTO tb_transaction VALUES (@transaction_id, @sender_id, @recipient_id, @ammount)", conn);
+                    insertTransaction.Parameters.Add(new SqlParameter("transaction_id", Id));
+                    insertTransaction.Parameters.Add(new SqlParameter("sender_id", Sender.Id));
+                    insertTransaction.Parameters.Add(new SqlParameter("recipient_id", Recipient.Id));
+                    insertTransaction.Parameters.Add(new SqlParameter("ammount", Ammount));
 
-                    InsertTransaction.ExecuteNonQuery();
+                    insertTransaction.ExecuteNonQuery();
                 }
             }
             catch(Exception ex)

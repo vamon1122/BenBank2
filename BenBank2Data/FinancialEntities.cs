@@ -18,7 +18,7 @@ namespace BenBank2Data
 
         public void Pay(FinancialEntity recipient, double ammount)
         {
-            Transaction MyTransaction = new Transaction()
+            Transaction myTransaction = new Transaction()
             {
                 Sender = this,
                 Recipient = recipient,
@@ -27,156 +27,16 @@ namespace BenBank2Data
 
             try
             {
-                MyTransaction.DoTransaction();
+                myTransaction.DoTransaction();
             }
             catch(Exception ex)
             {
                 throw ex;
             }
-           
         }
 
         internal abstract void TakeFunds(double ammount);
         internal abstract void RecieveFunds(double ammount);
-    }
-
-    public class Person : FinancialEntity
-    {
-        public Person(SqlDataReader reader)
-        {
-            Id = (Guid)reader[0];
-            Debug.WriteLine(reader[0]);
-            Debug.WriteLine(reader[1]);
-            foreach(Government g in DataStore.Governments)
-            {
-                Debug.WriteLine(string.Format("Id = {0} name = {1}", g.Id, g.Name));
-            }
-            PersonGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
-            Forename = reader[2].ToString().Trim();
-            Surname = reader[3].ToString().Trim();
-            Balance = Convert.ToDouble(reader[4]);
-            Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, PersonGovernment.Name, Balance.ToString("£0.00")));
-        }
-
-        public Government PersonGovernment { get; set; }
-        public override string Name { get { return string.Format("{0} {1}", Forename, Surname); } set { } }
-        public string Forename { get; set; }
-        public string Surname { get; set; }
-
-        internal override void TakeFunds(double ammount)
-        {
-            
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
-                {
-                    conn.Open();
-
-                    var TakeFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
-                    TakeFunds.Parameters.Add(new SqlParameter("person_id", Id));
-                    TakeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
-
-                    TakeFunds.ExecuteNonQuery();
-                }
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-
-            Balance -= ammount;
-        }
-
-        internal override void RecieveFunds(double ammount)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
-                {
-                    conn.Open();
-
-                    var RecieveFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
-                    RecieveFunds.Parameters.Add(new SqlParameter("person_id", Id));
-                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
-
-                    RecieveFunds.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            Balance += ammount;
-        }
-    }
-
-    public class Business : FinancialEntity
-    {
-        //This is for derived classes
-        internal Business()
-        {
-
-        }
-
-        public Business(SqlDataReader reader)
-        {
-            Id = (Guid)reader[0];
-            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
-            Name = reader[2].ToString().Trim();
-            Balance = Convert.ToDouble(reader[3]);
-            Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, BusinessGovernment.Name, Balance.ToString("£0.00")));
-        }
-
-        public Government BusinessGovernment { get; set; }
-
-        public override string Name { get; set; }
-
-        internal override void TakeFunds(double ammount)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
-                {
-                    conn.Open();
-
-                    var SendFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
-                    SendFunds.Parameters.Add(new SqlParameter("business_id", Id));
-                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
-
-                    SendFunds.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            Balance -= ammount;
-        }
-
-        internal override void RecieveFunds(double ammount)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
-                {
-                    conn.Open();
-
-                    var RecieveFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
-                    RecieveFunds.Parameters.Add(new SqlParameter("business_id", Id));
-                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
-
-                    RecieveFunds.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            Balance += ammount;
-        }
     }
 
     public class Government : FinancialEntity
@@ -203,21 +63,19 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var SendFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
-                    SendFunds.Parameters.Add(new SqlParameter("government_id", Id));
-                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+                    var takeFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
+                    takeFunds.Parameters.Add(new SqlParameter("government_id", Id));
+                    takeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
 
-                    SendFunds.ExecuteNonQuery();
+                    takeFunds.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
             Balance -= ammount;
         }
-
         internal override void RecieveFunds(double ammount)
         {
             try
@@ -226,11 +84,11 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var RecieveFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
-                    RecieveFunds.Parameters.Add(new SqlParameter("government_id", Id));
-                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+                    var recieveFunds = new SqlCommand("UPDATE tb_government SET balance = @balance WHERE government_id = @government_id", conn);
+                    recieveFunds.Parameters.Add(new SqlParameter("government_id", Id));
+                    recieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
 
-                    RecieveFunds.ExecuteNonQuery();
+                    recieveFunds.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
@@ -240,6 +98,153 @@ namespace BenBank2Data
 
             Balance += ammount;
         }
+    }
+
+    public class Person : FinancialEntity
+    {
+        public Person(SqlDataReader reader)
+        {
+            Id = (Guid)reader[0];
+            Debug.WriteLine(reader[0]);
+            Debug.WriteLine(reader[1]);
+            foreach(Government g in DataStore.Governments)
+            {
+                Debug.WriteLine(string.Format("Id = {0} name = {1}", g.Id, g.Name));
+            }
+            PersonGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Forename = reader[2].ToString().Trim();
+            Surname = reader[3].ToString().Trim();
+            Balance = Convert.ToDouble(reader[4]);
+            Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, PersonGovernment.Name, Balance.ToString("£0.00")));
+        }
+
+        public override string Name { get { return string.Format("{0} {1}", Forename, Surname); } set { } }
+        public Government PersonGovernment { get; set; }
+        public string Forename { get; set; }
+        public string Surname { get; set; }
+
+        internal override void TakeFunds(double ammount)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var takeFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
+                    takeFunds.Parameters.Add(new SqlParameter("person_id", Id));
+                    takeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+
+                    takeFunds.ExecuteNonQuery();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            Balance -= ammount;
+        }
+        internal override void RecieveFunds(double ammount)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var recieveFunds = new SqlCommand("UPDATE tb_person SET balance = @balance WHERE person_id = @person_id", conn);
+                    recieveFunds.Parameters.Add(new SqlParameter("person_id", Id));
+                    recieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    recieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            Balance += ammount;
+        }
+    }
+
+    public class Business : FinancialEntity
+    {
+        //This is for derived classes like Bank
+        internal Business()
+        {
+
+        }
+        public Business(SqlDataReader reader)
+        {
+            Id = (Guid)reader[0];
+            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Name = reader[2].ToString().Trim();
+            Balance = Convert.ToDouble(reader[3]);
+            Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, BusinessGovernment.Name, Balance.ToString("£0.00")));
+        }
+
+        public override string Name { get; set; }
+        public Government BusinessGovernment { get; set; }
+
+        internal override void TakeFunds(double ammount)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var takeFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
+                    takeFunds.Parameters.Add(new SqlParameter("business_id", Id));
+                    takeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+
+                    takeFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            Balance -= ammount;
+        }
+        internal override void RecieveFunds(double ammount)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var recieveFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
+                    recieveFunds.Parameters.Add(new SqlParameter("business_id", Id));
+                    recieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+
+                    recieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            Balance += ammount;
+        }
+    }
+
+    public class Bank : Business
+    {
+        public Bank(SqlDataReader reader)
+        {
+            Id = (Guid)reader[0];
+            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            Name = reader[2].ToString().Trim();
+            Balance = Convert.ToDouble(reader[3]);
+            PositiveInterest = Convert.ToDouble(reader[4]);
+            NegativeInterest = Convert.ToDouble(reader[5]);
+            Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, BusinessGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
+        }
+
+        public double PositiveInterest { get; set; }
+        public double NegativeInterest { get; set; }
     }
 
     public class BankAccount : FinancialEntity
@@ -253,11 +258,9 @@ namespace BenBank2Data
             Debug.WriteLine(string.Format("bank account was loaded. It's Id = {0}. It's bank is = {1}. It's account holder = {2}. It's balance is {3}.",  Id, AccountBank.Name, AccountHolder.Name, Balance.ToString("£0.00")));
         }
 
-        public Bank AccountBank { get; set; }
-
-        public FinancialEntity AccountHolder { get; }
-
         public override string Name { get { return string.Format("{0}'s bank account", AccountHolder.Name); } set { } }
+        public Bank AccountBank { get; set; }
+        public FinancialEntity AccountHolder { get; }
 
         internal override void TakeFunds(double ammount)
         {
@@ -267,21 +270,19 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var SendFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
-                    SendFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
-                    SendFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
+                    var takeFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
+                    takeFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
+                    takeFunds.Parameters.Add(new SqlParameter("balance", Balance - ammount));
 
-                    SendFunds.ExecuteNonQuery();
+                    takeFunds.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
             Balance -= ammount;
         }
-
         internal override void RecieveFunds(double ammount)
         {
             try
@@ -290,36 +291,18 @@ namespace BenBank2Data
                 {
                     conn.Open();
 
-                    var RecieveFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
-                    RecieveFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
-                    RecieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
+                    var recieveFunds = new SqlCommand("UPDATE tb_bank_account SET balance = @balance WHERE bank_account_id = @bank_account_id", conn);
+                    recieveFunds.Parameters.Add(new SqlParameter("bank_account_id", Id));
+                    recieveFunds.Parameters.Add(new SqlParameter("balance", Balance + ammount));
 
-                    RecieveFunds.ExecuteNonQuery();
+                    recieveFunds.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
             Balance += ammount;
         }
-    }
-
-    public class Bank : Business
-    {
-        public Bank(SqlDataReader reader) 
-        {
-            Id = (Guid)reader[0];
-            BusinessGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
-            Name = reader[2].ToString().Trim();
-            Balance = Convert.ToDouble(reader[3]);
-            PositiveInterest = Convert.ToDouble(reader[4]);
-            NegativeInterest = Convert.ToDouble(reader[5]);
-            Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, BusinessGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
-        }
-
-        public double PositiveInterest { get; set; }
-        public double NegativeInterest { get; set; }
     }
 }

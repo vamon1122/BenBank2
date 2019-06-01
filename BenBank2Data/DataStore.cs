@@ -11,10 +11,6 @@ namespace BenBank2Data
     public static class DataStore
     {
         public static readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benba\Documents\GitHub\BenBank2\BenBank2Data\BenBank2Db.mdf;Integrated Security=True";
-        public static void Everything()
-        {
-
-        }
 
         static DataStore()
         {
@@ -51,112 +47,112 @@ namespace BenBank2Data
         {
             Debug.WriteLine("Loading entities from the database...");
             DateTime start = DateTime.Now;
-            DataStore.LoadGovernments();
-            DataStore.LoadPeople();
-            DataStore.LoadBusinesses();
-            DataStore.LoadBanks();
-            DataStore.LoadBankAccounts();
+            LoadGovernments();
+            LoadPeople();
+            LoadBusinesses();
+            LoadBanks();
+            LoadBankAccounts();
             var timeTaken = (double)(DateTime.Now - start).Milliseconds / 1000;
             Debug.WriteLine(string.Format("Loaded in {0} second(s)", timeTaken.ToString("0.000")));
-        }
 
-        private static void LoadGovernments()
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            void LoadGovernments()
             {
-                conn.Open();
-                Debug.WriteLine("Connection opened");
-
-                SqlCommand SelectGovernments = new SqlCommand("SELECT * FROM tb_government", conn);
-
-                using (SqlDataReader reader = SelectGovernments.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    Debug.WriteLine("Reader executed");
-                    while (reader.Read())
+                    conn.Open();
+                    Debug.WriteLine("Connection opened");
+
+                    SqlCommand selectGovernments = new SqlCommand("SELECT * FROM tb_government", conn);
+
+                    using (SqlDataReader reader = selectGovernments.ExecuteReader())
                     {
-                        Debug.WriteLine((Guid)reader[0]);
-                        Debug.WriteLine(reader[1].ToString().Trim());
-                        Governments.Add(new Government(reader));
+                        Debug.WriteLine("Reader executed");
+                        while (reader.Read())
+                        {
+                            Debug.WriteLine((Guid)reader[0]);
+                            Debug.WriteLine(reader[1].ToString().Trim());
+                            Governments.Add(new Government(reader));
+                        }
                     }
                 }
             }
-        }
 
-        private static void LoadPeople()
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            void LoadPeople()
             {
-                conn.Open();
-                Debug.WriteLine("Connection opened");
-
-                SqlCommand SelectPeople = new SqlCommand("SELECT * FROM tb_person", conn);
-
-                using (SqlDataReader reader = SelectPeople.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    Debug.WriteLine("Reader executed");
-                    while (reader.Read())
+                    conn.Open();
+                    Debug.WriteLine("Connection opened");
+
+                    SqlCommand selectPeople = new SqlCommand("SELECT * FROM tb_person", conn);
+
+                    using (SqlDataReader reader = selectPeople.ExecuteReader())
                     {
-                        People.Add(new Person(reader));
+                        Debug.WriteLine("Reader executed");
+                        while (reader.Read())
+                        {
+                            People.Add(new Person(reader));
+                        }
                     }
                 }
             }
-        }
 
-        private static void LoadBusinesses()
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            void LoadBusinesses()
             {
-                conn.Open();
-                Debug.WriteLine("Connection opened");
-
-                SqlCommand SelectBusinesses = new SqlCommand("SELECT tb_business.* FROM tb_business INNER JOIN tb_bank ON tb_business.business_id <> tb_bank.business_id", conn);
-
-                using (SqlDataReader reader = SelectBusinesses.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    Debug.WriteLine("Reader executed");
-                    while (reader.Read())
+                    conn.Open();
+                    Debug.WriteLine("Connection opened");
+
+                    SqlCommand selectBusinesses = new SqlCommand("SELECT tb_business.* FROM tb_business INNER JOIN tb_bank ON tb_business.business_id <> tb_bank.business_id", conn);
+
+                    using (SqlDataReader reader = selectBusinesses.ExecuteReader())
                     {
-                        Businesses.Add(new Business(reader));
+                        Debug.WriteLine("Reader executed");
+                        while (reader.Read())
+                        {
+                            Businesses.Add(new Business(reader));
+                        }
                     }
                 }
             }
-        }
 
-        private static void LoadBanks()
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            void LoadBanks()
             {
-                conn.Open();
-                Debug.WriteLine("Connection opened");
-
-                SqlCommand SelectBusinesses = new SqlCommand("SELECT tb_business.*, tb_bank.positive_interest, tb_bank.negative_interest FROM tb_business INNER JOIN tb_bank ON tb_business.business_id = tb_bank.business_id", conn);
-
-                using (SqlDataReader reader = SelectBusinesses.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    Debug.WriteLine("Reader executed");
-                    while (reader.Read())
+                    conn.Open();
+                    Debug.WriteLine("Connection opened");
+
+                    SqlCommand selectBanks = new SqlCommand("SELECT tb_business.*, tb_bank.positive_interest, tb_bank.negative_interest FROM tb_business INNER JOIN tb_bank ON tb_business.business_id = tb_bank.business_id", conn);
+
+                    using (SqlDataReader reader = selectBanks.ExecuteReader())
                     {
-                        Banks.Add(new Bank(reader));
+                        Debug.WriteLine("Reader executed");
+                        while (reader.Read())
+                        {
+                            Banks.Add(new Bank(reader));
+                        }
                     }
                 }
             }
-        }
 
-        private static void LoadBankAccounts()
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            void LoadBankAccounts()
             {
-                conn.Open();
-                Debug.WriteLine("Connection opened");
-
-                SqlCommand SelectBankAccounts = new SqlCommand("SELECT * FROM tb_bank_account", conn);
-
-                using (SqlDataReader reader = SelectBankAccounts.ExecuteReader())
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
-                    Debug.WriteLine("Reader executed");
-                    while (reader.Read())
+                    conn.Open();
+                    Debug.WriteLine("Connection opened");
+
+                    SqlCommand selectBankAccounts = new SqlCommand("SELECT * FROM tb_bank_account", conn);
+
+                    using (SqlDataReader reader = selectBankAccounts.ExecuteReader())
                     {
-                        BankAccounts.Add(new BankAccount(reader));
+                        Debug.WriteLine("Reader executed");
+                        while (reader.Read())
+                        {
+                            BankAccounts.Add(new BankAccount(reader));
+                        }
                     }
                 }
             }
