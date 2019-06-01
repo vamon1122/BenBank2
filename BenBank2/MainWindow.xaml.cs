@@ -48,6 +48,7 @@ namespace BenBank2
             }
         }
 
+        
         private void ListBoxPayers_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             foreach(UserControl_FinancialEntity payer in ListBox_Payers.Items)
@@ -57,6 +58,14 @@ namespace BenBank2
                 else
                     payer.Selected = false;
             }
+        }
+
+        //https://stackoverflow.com/questions/16234522/scrollviewer-mouse-wheel-not-working
+        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
         }
 
         private void ListBoxPayees_SelectedIndexChanged(object sender, System.EventArgs e)

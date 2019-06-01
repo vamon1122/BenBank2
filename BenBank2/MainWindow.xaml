@@ -23,12 +23,12 @@
             </Grid.RowDefinitions>
 
             <Label FontSize="30" HorizontalAlignment="Center">Payer(s)</Label>
-            <ScrollViewer Width="281" Grid.Row="1">
-                <ListBox Name="ListBox_Payers" SelectionMode="Extended" SelectionChanged="ListBoxPayers_SelectedIndexChanged" />
+            <ScrollViewer Width="281" Grid.Row="1" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                <ListBox Name="ListBox_Payers" SelectionMode="Extended" SelectionChanged="ListBoxPayers_SelectedIndexChanged"  />
             </ScrollViewer>
 
             <Label FontSize="30" HorizontalAlignment="Center" Grid.Column="1">Payee(s)</Label>
-            <ScrollViewer Width="281" Grid.Column="1" Grid.Row="1">
+            <ScrollViewer Width="281" Grid.Column="1" Grid.Row="1" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <ListBox Name="ListBox_Payees" SelectionMode="Extended" SelectionChanged="ListBoxPayees_SelectedIndexChanged" />
             </ScrollViewer>
         </Grid>
