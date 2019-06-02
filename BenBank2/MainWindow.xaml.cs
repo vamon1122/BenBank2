@@ -34,18 +34,60 @@ namespace BenBank2
 
         private void RefreshFinancialEntities()
         {
-            ListBox_Payers.Items.Clear();
-            ListBox_Payees.Items.Clear();
+            Refresh(ListBox_Payers, ComboBox_PayerSort);
+            Refresh(ListBox_Payees, ComboBox_PayeeSort);
 
-            foreach (FinancialEntity financialEntity in DataStore.FinancialEntities)
+            void Refresh(ListBox listOfFinancialEntities, ComboBox financialEntityGroup)
             {
-                ListBox_Payers.Items.Add(new UserControl_FinancialEntity(financialEntity));
+                listOfFinancialEntities.Items.Clear();
+
+                string group;
+
+                if (financialEntityGroup.SelectedValue == null)
+                    group = "";
+                else
+                    group = financialEntityGroup.SelectedValue.ToString().Split(':')[1].Trim();
+
+                List<FinancialEntity> financialEntities = GetFinancialEntitiesByGroup(group);
+
+                foreach (FinancialEntity financialEntity in financialEntities)
+                {
+                    listOfFinancialEntities.Items.Add(new UserControl_FinancialEntity(financialEntity));
+                }
             }
 
-            foreach (FinancialEntity financialEntity in DataStore.FinancialEntities)
+            List<FinancialEntity> GetFinancialEntitiesByGroup(string payerGroup)
             {
-                ListBox_Payees.Items.Add(new UserControl_FinancialEntity(financialEntity));
+                List<FinancialEntity> financialEntityGroup;
+
+                switch (payerGroup)
+                {
+                    case "People":
+                        Debug.WriteLine("People!");
+                        //Derived class to base class:
+                        //https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
+                        financialEntityGroup = DataStore.People.ConvertAll(x => (FinancialEntity)x);
+                        break;
+                    case "Governments":
+                        financialEntityGroup = DataStore.Governments.ConvertAll(x => (FinancialEntity)x); ;
+                        break;
+                    case "Banks":
+                        financialEntityGroup = DataStore.Banks.ConvertAll(x => (FinancialEntity)x); ;
+                        break;
+                    case "Bank Accounts":
+                        financialEntityGroup = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x); ;
+                        break;
+                    default:
+                        financialEntityGroup = DataStore.FinancialEntities;
+                        break;
+                }
+
+                return financialEntityGroup;
             }
+
+            
+
+            
         }
 
         
@@ -163,6 +205,17 @@ namespace BenBank2
                 //No payer
                 MessageBox.Show("There is no payer selected!", "No Payer");
             }
+        }
+
+        private void ComboBox_PayerSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.WriteLine("Payer sort 1 = " + ComboBox_PayerSort.Text);
+            RefreshFinancialEntities();
+        }
+
+        private void ComboBox_PayeeSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshFinancialEntities();
         }
     }
 }

@@ -18,17 +18,32 @@
                 <ColumnDefinition Width="281" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="1*" />
-                <RowDefinition Height="8*" />
+                <RowDefinition Height="16*" />
             </Grid.RowDefinitions>
 
             <Label FontSize="30" HorizontalAlignment="Center">Payer(s)</Label>
-            <ScrollViewer Width="281" Grid.Row="1" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+            <ComboBox Name="ComboBox_PayerSort" Grid.Row="1" SelectionChanged="ComboBox_PayerSort_SelectionChanged">
+                <ComboBoxItem>No Filter</ComboBoxItem>
+                <ComboBoxItem>People</ComboBoxItem>
+                <ComboBoxItem>Governments</ComboBoxItem>
+                <ComboBoxItem>Banks</ComboBoxItem>
+                <ComboBoxItem>Bank Accounts</ComboBoxItem>
+            </ComboBox>
+            <ScrollViewer Width="281" Grid.Row="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <ListBox Name="ListBox_Payers" SelectionMode="Extended" SelectionChanged="ListBoxPayers_SelectedIndexChanged"  />
             </ScrollViewer>
 
             <Label FontSize="30" HorizontalAlignment="Center" Grid.Column="1">Payee(s)</Label>
-            <ScrollViewer Width="281" Grid.Column="1" Grid.Row="1" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+            <ComboBox Name="ComboBox_PayeeSort" Grid.Row="1" Grid.Column="1" SelectionChanged="ComboBox_PayeeSort_SelectionChanged">
+                <ComboBoxItem>No Filter</ComboBoxItem>
+                <ComboBoxItem>People</ComboBoxItem>
+                <ComboBoxItem>Governments</ComboBoxItem>
+                <ComboBoxItem>Banks</ComboBoxItem>
+                <ComboBoxItem>Bank Accounts</ComboBoxItem>
+            </ComboBox>
+            <ScrollViewer Width="281" Grid.Column="1" Grid.Row="2" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <ListBox Name="ListBox_Payees" SelectionMode="Extended" SelectionChanged="ListBoxPayees_SelectedIndexChanged" />
             </ScrollViewer>
         </Grid>
