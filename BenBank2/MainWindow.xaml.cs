@@ -69,13 +69,16 @@ namespace BenBank2
                         financialEntityGroup = DataStore.People.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Governments":
-                        financialEntityGroup = DataStore.Governments.ConvertAll(x => (FinancialEntity)x); ;
+                        financialEntityGroup = DataStore.Governments.ConvertAll(x => (FinancialEntity)x);
+                        break;
+                    case "Businesses":
+                        financialEntityGroup = DataStore.Businesses.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Banks":
-                        financialEntityGroup = DataStore.Banks.ConvertAll(x => (FinancialEntity)x); ;
+                        financialEntityGroup = DataStore.Banks.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Bank Accounts":
-                        financialEntityGroup = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x); ;
+                        financialEntityGroup = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x);
                         break;
                     default:
                         financialEntityGroup = DataStore.FinancialEntities;

@@ -18,8 +18,8 @@
                 <ColumnDefinition Width="281" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="16*" />
             </Grid.RowDefinitions>
 
@@ -28,6 +28,7 @@
                 <ComboBoxItem>No Filter</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
+                <ComboBoxItem>Businesses</ComboBoxItem>
                 <ComboBoxItem>Banks</ComboBoxItem>
                 <ComboBoxItem>Bank Accounts</ComboBoxItem>
             </ComboBox>
@@ -40,6 +41,7 @@
                 <ComboBoxItem>No Filter</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
+                <ComboBoxItem>Businesses</ComboBoxItem>
                 <ComboBoxItem>Banks</ComboBoxItem>
                 <ComboBoxItem>Bank Accounts</ComboBoxItem>
             </ComboBox>
@@ -50,8 +52,8 @@
         
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="10*" />
-                <RowDefinition />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
