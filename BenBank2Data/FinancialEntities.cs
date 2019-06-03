@@ -117,7 +117,7 @@ namespace BenBank2Data
             Forename = reader[2].ToString().Trim();
             Surname = reader[3].ToString().Trim();
             Balance = Convert.ToDouble(reader[4]);
-            Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, PersonGovernment.Name, Balance.ToString("£0.00")));
+            Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
         public override string Name { get { return string.Format("{0} {1}", Forename, Surname); } set { } }
@@ -181,7 +181,7 @@ namespace BenBank2Data
             MyGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
             Name = reader[2].ToString().Trim();
             Balance = Convert.ToDouble(reader[3]);
-            Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, BusinessGovernment.Name, Balance.ToString("£0.00")));
+            Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
         public override string Name { get; set; }
@@ -240,7 +240,7 @@ namespace BenBank2Data
             Balance = Convert.ToDouble(reader[3]);
             PositiveInterest = Convert.ToDouble(reader[4]);
             NegativeInterest = Convert.ToDouble(reader[5]);
-            Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, BusinessGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
+            Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, MyGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
         }
 
         public double PositiveInterest { get; set; }
