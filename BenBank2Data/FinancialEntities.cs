@@ -253,9 +253,9 @@ namespace BenBank2Data
         {
             Id = (Guid)reader[0];
             AccountBank = DataStore.Banks.First(x => x.Id == (Guid)reader[1]);
-            MyGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[2]);
-            AccountHolder = DataStore.FinancialEntities.First(x => x.Id == (Guid)reader[3]);
-            Balance = Convert.ToDouble(reader[4]);
+            AccountHolder = DataStore.FinancialEntities.First(x => x.Id == (Guid)reader[2]);
+            MyGovernment = AccountHolder.MyGovernment;
+            Balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("bank account was loaded. It's Id = {0}. It's bank is = {1}. It's account holder = {2}. It's balance is {3}.",  Id, AccountBank.Name, AccountHolder.Name, Balance.ToString("£0.00")));
         }
 
