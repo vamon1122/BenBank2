@@ -104,7 +104,10 @@ namespace BenBank2Data
                     conn.Open();
                     Debug.WriteLine("Connection opened");
 
-                    SqlCommand selectBusinesses = new SqlCommand("SELECT tb_business.* FROM tb_business INNER JOIN tb_bank ON tb_business.business_id <> tb_bank.business_id", conn);
+                    //Kept this because it is an example of an INNER JOIN, however it is no longer necessary because banks fully stored in tb_bank now!
+                    //SqlCommand selectBusinesses = new SqlCommand("SELECT tb_business.* FROM tb_business INNER JOIN tb_bank ON tb_business.business_id <> tb_bank.business_id", conn);
+
+                    SqlCommand selectBusinesses = new SqlCommand("SELECT * FROM tb_business", conn);
 
                     using (SqlDataReader reader = selectBusinesses.ExecuteReader())
                     {
@@ -124,7 +127,10 @@ namespace BenBank2Data
                     conn.Open();
                     Debug.WriteLine("Connection opened");
 
-                    SqlCommand selectBanks = new SqlCommand("SELECT tb_business.*, tb_bank.positive_interest, tb_bank.negative_interest FROM tb_business INNER JOIN tb_bank ON tb_business.business_id = tb_bank.business_id", conn);
+                    //Kept this because it is an example of an INNER JOIN, however it is no longer necessary because banks fully stored in tb_bank now!
+                    //SqlCommand selectBanks = new SqlCommand("SELECT tb_business.*, tb_bank.positive_interest, tb_bank.negative_interest FROM tb_business INNER JOIN tb_bank ON tb_business.business_id = tb_bank.business_id", conn);
+
+                    SqlCommand selectBanks = new SqlCommand("SELECT * FROM tb_bank", conn);
 
                     using (SqlDataReader reader = selectBanks.ExecuteReader())
                     {
