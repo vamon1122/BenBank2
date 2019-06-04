@@ -70,31 +70,38 @@ namespace BenBank2Data
 
         public void ExecuteWithVAT()
         {
+            double ammountAfterVAT = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            double taxDue = Ammount - ammountAfterVAT;
+
             Transaction PayPayee = new Transaction();
             PayPayee.Sender = Sender;
             PayPayee.Recipient = Recipient;
-            PayPayee.Ammount = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            PayPayee.Ammount = ammountAfterVAT;
             PayPayee.Execute();
 
             Transaction PayVAT = new Transaction();
             PayVAT.Sender = Sender;
-            PayVAT.Recipient = Recipient;
-            PayVAT.Ammount = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            PayVAT.Recipient = Sender.MyGovernment;
+            PayVAT.Ammount = taxDue;
             PayVAT.Execute();
         }
 
         public void ExecuteWithIncomeTax()
         {
+            
+            double ammountAfterTax = (double)decimal.Round((decimal)(Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100))), 2, MidpointRounding.AwayFromZero);
+            double taxDue = Ammount - ammountAfterTax;
+
             Transaction PayPayee = new Transaction();
             PayPayee.Sender = Sender;
             PayPayee.Recipient = Recipient;
-            PayPayee.Ammount = Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100));
+            PayPayee.Ammount = ammountAfterTax;
             PayPayee.Execute();
 
             Transaction PayIncomeTax = new Transaction();
             PayIncomeTax.Sender = Sender;
-            PayIncomeTax.Recipient = Recipient;
-            PayIncomeTax.Ammount = Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100));
+            PayIncomeTax.Recipient = Recipient.MyGovernment;
+            PayIncomeTax.Ammount = taxDue;
             PayIncomeTax.Execute();
         }
     }
