@@ -178,13 +178,15 @@ namespace BenBank2Data
         public Business(SqlDataReader reader)
         {
             Id = (Guid)reader[0];
-            MyGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            BusinessOwner = DataStore.FinancialEntities.Find(x => x.Id.ToString() == reader[1].ToString());
+            MyGovernment = BusinessOwner.MyGovernment;
             Name = reader[2].ToString().Trim();
             Balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
         public override string Name { get; set; }
+        public FinancialEntity BusinessOwner { get; set; }
 
         internal override void TakeFunds(double ammount)
         {
@@ -235,7 +237,8 @@ namespace BenBank2Data
         public Bank(SqlDataReader reader)
         {
             Id = (Guid)reader[0];
-            MyGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
+            BankOwner = DataStore.People.Find(x => x.Id.ToString() == reader[1].ToString());
+            MyGovernment = BankOwner.MyGovernment;
             Name = reader[2].ToString().Trim();
             Balance = Convert.ToDouble(reader[3]);
             PositiveInterest = Convert.ToDouble(reader[4]);
@@ -243,6 +246,7 @@ namespace BenBank2Data
             Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, MyGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
         }
 
+        public Person BankOwner { get; set; }
         public double PositiveInterest { get; set; }
         public double NegativeInterest { get; set; }
     }
