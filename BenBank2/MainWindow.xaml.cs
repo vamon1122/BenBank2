@@ -171,7 +171,7 @@ namespace BenBank2
                                 double senderStartingBalance = transaction.Sender.Balance;
                                 double recipientStartingBalance = transaction.Recipient.Balance;
 
-                                transaction.DoTransaction();
+                                transaction.Execute();
                                 Debug.WriteLine(string.Format("Transaction {0}/{1} - Payer {2}/{3} \"{4}\" payed payee {5}/{6} \"{7}\" {8}. {4} started with {9} but now has {10}. {7} started with {11} but now has {12}.", transactionNo, noOfTransactions, payerNo, ListBox_Payers.SelectedItems.Count, transaction.Sender.Name, payeeNo, ListBox_Payees.SelectedItems.Count, transaction.Recipient.Name, ammount.ToString("£0.00"), senderStartingBalance.ToString("£0.00"), transaction.Sender.Balance.ToString("£0.00"), recipientStartingBalance.ToString("£0.00"), transaction.Recipient.Balance.ToString("£0.00")));
                             }
                             payeeNo = 0;

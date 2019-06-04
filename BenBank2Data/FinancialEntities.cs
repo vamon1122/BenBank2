@@ -28,7 +28,7 @@ namespace BenBank2Data
 
             try
             {
-                myTransaction.DoTransaction();
+                myTransaction.Execute();
             }
             catch(Exception ex)
             {

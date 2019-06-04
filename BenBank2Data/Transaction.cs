@@ -19,7 +19,7 @@ namespace BenBank2Data
             Id = Guid.NewGuid();
         }
 
-        public void DoTransaction()
+        public void Execute()
         {
             try
             {
@@ -66,6 +66,36 @@ namespace BenBank2Data
                 }
             }
 
+        }
+
+        public void ExecuteWithVAT()
+        {
+            Transaction PayPayee = new Transaction();
+            PayPayee.Sender = Sender;
+            PayPayee.Recipient = Recipient;
+            PayPayee.Ammount = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            PayPayee.Execute();
+
+            Transaction PayVAT = new Transaction();
+            PayVAT.Sender = Sender;
+            PayVAT.Recipient = Recipient;
+            PayVAT.Ammount = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            PayVAT.Execute();
+        }
+
+        public void ExecuteWithIncomeTax()
+        {
+            Transaction PayPayee = new Transaction();
+            PayPayee.Sender = Sender;
+            PayPayee.Recipient = Recipient;
+            PayPayee.Ammount = Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100));
+            PayPayee.Execute();
+
+            Transaction PayIncomeTax = new Transaction();
+            PayIncomeTax.Sender = Sender;
+            PayIncomeTax.Recipient = Recipient;
+            PayIncomeTax.Ammount = Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100));
+            PayIncomeTax.Execute();
         }
     }
 }
