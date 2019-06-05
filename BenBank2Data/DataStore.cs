@@ -10,10 +10,11 @@ namespace BenBank2Data
 {
     public static class DataStore
     {
-        public static readonly string ConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\benba\Documents\GitHub\BenBank2\BenBank2Data\BenBank2Db.mdf;Integrated Security=True";
+        public static readonly string ConnectionString = string.Format(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={0}BenBank2Db.mdf;Integrated Security=True", AppDomain.CurrentDomain.BaseDirectory);
 
         static DataStore()
         {
+            Debug.WriteLine("----------" + AppDomain.CurrentDomain.BaseDirectory);
             Banks = new List<Bank>();
             Businesses = new List<Business>();
             Governments = new List<Government>();
