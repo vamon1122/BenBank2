@@ -223,6 +223,7 @@ namespace BenBank2Data
             }
             _balance -= transaction.Ammount;
         }
+
         internal override void RecieveFunds(Transaction transaction)
         {
             try
@@ -289,6 +290,32 @@ namespace BenBank2Data
             {
                 _balance -= transaction.Ammount;
             }
+        }
+
+        internal override void RecieveFunds(Transaction transaction)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(DataStore.ConnectionString))
+                {
+                    conn.Open();
+
+                    var recieveFunds = new SqlCommand("UPDATE tb_business SET balance = @balance WHERE business_id = @business_id", conn);
+                    recieveFunds.Parameters.Add(new SqlParameter("business_id", Id));
+                    recieveFunds.Parameters.Add(new SqlParameter("balance", Balance + transaction.Ammount));
+
+                    recieveFunds.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            if (!DataStore.BankAccounts.FindAll(x => x.AccountBank.Id.ToString() == this.Id.ToString()).ToList().Contains(transaction.Sender))
+            {
+                _balance += transaction.Ammount;
+            }
+            
         }
     }
 
