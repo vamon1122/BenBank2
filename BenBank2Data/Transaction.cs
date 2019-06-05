@@ -43,7 +43,7 @@ namespace BenBank2Data
 
             try
             {
-                Sender.TakeFunds(Ammount);
+                Sender.TakeFunds(this);
             }
             catch(Exception ex)
             {
@@ -52,13 +52,13 @@ namespace BenBank2Data
 
             try
             {
-                Recipient.RecieveFunds(Ammount);
+                Recipient.RecieveFunds(this);
             }
             catch
             {
                 try
                 {
-                    Sender.RecieveFunds(Ammount);
+                    Sender.RecieveFunds(this);
                 }
                 catch(Exception ex)
                 {
