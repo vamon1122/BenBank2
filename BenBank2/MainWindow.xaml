@@ -27,7 +27,7 @@
 
             <Label FontSize="30" HorizontalAlignment="Center">Payer(s)</Label>
             <ComboBox Name="ComboBox_PayerType" Grid.Row="1" SelectionChanged="PayerFiltersChanged">
-                <ComboBoxItem>No Filter</ComboBoxItem>
+                <ComboBoxItem>All</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
                 <ComboBoxItem>Businesses</ComboBoxItem>
@@ -41,7 +41,7 @@
             <CheckBox Name="CheckBox_PayerShowBankAccounts" Grid.Row="3" HorizontalAlignment="Right" Content="Show bank accounts" IsChecked="True" Click="PayerFiltersChanged" />
             <Label FontSize="30" HorizontalAlignment="Center" Grid.Column="1">Payee(s)</Label>
             <ComboBox Name="ComboBox_PayeeType" Grid.Row="1" Grid.Column="1" SelectionChanged="PayeeFiltersChanged">
-                <ComboBoxItem>No Filter</ComboBoxItem>
+                <ComboBoxItem>All</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
                 <ComboBoxItem>Businesses</ComboBoxItem>

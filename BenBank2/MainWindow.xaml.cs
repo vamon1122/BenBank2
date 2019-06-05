@@ -31,6 +31,11 @@ namespace BenBank2
 
             RefreshFilterOptions();
             RefreshFinancialEntities();
+
+            ComboBox_PayerType.SelectedIndex = 0;
+            ComboBox_PayeeType.SelectedIndex = 0;
+            ComboBox_PayerGovernment.SelectedIndex = 0;
+            ComboBox_PayeeGovernment.SelectedIndex = 0;
         }
 
         private void RefreshFilterOptions()
@@ -38,7 +43,7 @@ namespace BenBank2
             ComboBox_PayerGovernment.Items.Clear();
             ComboBox_PayeeGovernment.Items.Clear();
             
-            var noneSelected = new { Name = "None selected", Id = Guid.Empty };
+            var noneSelected = new { Name = "All", Id = Guid.Empty };
 
             ComboBox_PayerGovernment.Items.Add(noneSelected);
             ComboBox_PayeeGovernment.Items.Add(noneSelected);
@@ -62,7 +67,8 @@ namespace BenBank2
 
             void RefreshListBox()
             {
-                listbox_FinancialEntities.Items.Clear();
+                if(listbox_FinancialEntities != null)
+                    listbox_FinancialEntities.Items.Clear();
 
                 string group;
 
