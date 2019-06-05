@@ -58,7 +58,6 @@ namespace BenBank2
 
         private void RefreshFinancialEntities(ListBox listbox_FinancialEntities, ComboBox comboBox_FinancialEntityGroup, ComboBox comboBox_FinancialEntityGovernment, CheckBox showCash, CheckBox showBankAccounts)
         {
-
             RefreshListBox();
 
             void RefreshListBox()
@@ -87,70 +86,93 @@ namespace BenBank2
                 {
                     listbox_FinancialEntities.Items.Add(new UserControl_FinancialEntity(financialEntity));
                 }
-            }
 
-            List<FinancialEntity> GetFinancialEntitiesByGroup(string payerGroup)
-            {
-                var listOfFinancialEntity = new List<FinancialEntity>();
-
-                switch (payerGroup)
+                List<FinancialEntity> GetFinancialEntitiesByGroup(string payerGroup)
                 {
-                    case "People":
-                        if ((bool)showCash.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.People);
-                        }
+                    var listOfFinancialEntity = new List<FinancialEntity>();
 
-                        if ((bool)showBankAccounts.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.People.Contains(x.AccountHolder)));
-                        }
-                        break;
-                    case "Governments":
-                        if ((bool)showCash.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.Governments);
-                        }
+                    switch (payerGroup)
+                    {
+                        case "People":
+                            if ((bool)showCash.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.People);
+                            }
 
-                        if ((bool)showBankAccounts.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Governments.Contains(x.AccountHolder)));
-                        }
-                        break;
-                    case "Businesses":
-                        if ((bool)showCash.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.Businesses);
-                        }
+                            if ((bool)showBankAccounts.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.People.Contains(x.AccountHolder)));
+                            }
+                            break;
+                        case "Governments":
+                            if ((bool)showCash.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.Governments);
+                            }
 
-                        if ((bool)showBankAccounts.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Businesses.Contains(x.AccountHolder)));
-                        }
-                        break;
-                    case "Banks":
-                        if ((bool)showCash.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.Banks);
-                        }
+                            if ((bool)showBankAccounts.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Governments.Contains(x.AccountHolder)));
+                            }
+                            break;
+                        case "Businesses":
+                            if ((bool)showCash.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.Businesses);
+                            }
 
-                        if ((bool)showBankAccounts.IsChecked)
-                        {
-                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Banks.Contains(x.AccountHolder)));
-                        }
-                        break;
-                    default:
-                        listOfFinancialEntity = DataStore.FinancialEntities;
-                        break;
+                            if ((bool)showBankAccounts.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Businesses.Contains(x.AccountHolder)));
+                            }
+                            break;
+                        case "Banks":
+                            if ((bool)showCash.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.Banks);
+                            }
+
+                            if ((bool)showBankAccounts.IsChecked)
+                            {
+                                listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Banks.Contains(x.AccountHolder)));
+                            }
+                            break;
+                        default:
+                            if((bool)showCash.IsChecked && (bool)showBankAccounts.IsChecked)
+                            {
+                                listOfFinancialEntity = DataStore.FinancialEntities;
+                            }
+                            else
+                            {
+                                if ((bool)showCash.IsChecked)
+                                {
+                                    listOfFinancialEntity.AddRange(DataStore.FinancialEntities.Where(x => !DataStore.BankAccounts.Contains(x)));
+                                }
+
+                                if ((bool)showBankAccounts.IsChecked)
+                                {
+                                    listOfFinancialEntity.AddRange(DataStore.FinancialEntities.Where(x => DataStore.BankAccounts.Contains(x)));
+                                }
+                            }
+                            break;
+                    }
+                    return listOfFinancialEntity;
                 }
-
-                return listOfFinancialEntity;
             }
         }
-        
+
+        //Fixes broken scroll wheel when hovering over ScrollViewer
+        //Source: https://stackoverflow.com/questions/16234522/scrollviewer-mouse-wheel-not-working
+        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
+
         private void ListBoxPayers_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            foreach(UserControl_FinancialEntity payer in ListBox_Payers.Items)
+            foreach (UserControl_FinancialEntity payer in ListBox_Payers.Items)
             {
                 if (ListBox_Payers.SelectedItems.Contains(payer))
                     payer.Selected = true;
@@ -168,15 +190,6 @@ namespace BenBank2
                 else
                     payee.Selected = false;
             }
-        }
-
-        //Fixes broken scroll wheel when hovering over ScrollViewer
-        //Source: https://stackoverflow.com/questions/16234522/scrollviewer-mouse-wheel-not-working
-        private void ScrollViewer_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
-        {
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            e.Handled = true;
         }
 
         private void Button_Pay_Click(object sender, RoutedEventArgs e)
