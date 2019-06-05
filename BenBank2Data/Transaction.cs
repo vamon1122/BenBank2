@@ -70,7 +70,7 @@ namespace BenBank2Data
 
         public void ExecuteWithVAT()
         {
-            double ammountAfterVAT = Ammount / (1 + (Sender.MyGovernment.VAT / 100));
+            double ammountAfterVAT = (double)decimal.Round((decimal)(Ammount / (1 + (Sender.MyGovernment.VAT / 100))), 2, MidpointRounding.AwayFromZero);
             double taxDue = Ammount - ammountAfterVAT;
 
             Transaction PayPayee = new Transaction();
@@ -88,8 +88,7 @@ namespace BenBank2Data
 
         public void ExecuteWithIncomeTax()
         {
-            
-            double ammountAfterTax = (double)decimal.Round((decimal)(Ammount / (1 + (Sender.MyGovernment.IncomeTax / 100))), 2, MidpointRounding.AwayFromZero);
+            double ammountAfterTax = (double)decimal.Round((decimal)(Ammount / (1 + (Recipient.MyGovernment.IncomeTax / 100))), 2, MidpointRounding.AwayFromZero);
             double taxDue = Ammount - ammountAfterTax;
 
             Transaction PayPayee = new Transaction();
