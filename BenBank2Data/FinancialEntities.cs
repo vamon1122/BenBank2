@@ -14,7 +14,8 @@ namespace BenBank2Data
     {
         public Guid Id { get; set; }
         public abstract string Name { get; set; }
-        public double Balance { get; set; }
+        internal double _balance;
+        public double Balance { get { return _balance; } }
         public Government MyGovernment { get; set; }
 
         public void Pay(FinancialEntity recipient, double ammount)
@@ -48,7 +49,7 @@ namespace BenBank2Data
         {
             Id = (Guid)reader[0];
             Name = reader[1].ToString().Trim();
-            Balance = Convert.ToDouble(reader[2]);
+            _balance = Convert.ToDouble(reader[2]);
             VAT = Convert.ToDouble(reader[3]);
             IncomeTax = Convert.ToDouble(reader[4]);
             MyGovernment = this;
@@ -78,7 +79,7 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance -= ammount;
+            _balance -= ammount;
         }
         internal override void RecieveFunds(double ammount)
         {
@@ -100,7 +101,7 @@ namespace BenBank2Data
                 throw ex;
             }
 
-            Balance += ammount;
+            _balance += ammount;
         }
     }
 
@@ -116,7 +117,7 @@ namespace BenBank2Data
             MyGovernment = DataStore.Governments.First(x => x.Id == (Guid)reader[1]);
             Forename = reader[2].ToString().Trim();
             Surname = reader[3].ToString().Trim();
-            Balance = Convert.ToDouble(reader[4]);
+            _balance = Convert.ToDouble(reader[4]);
             Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
@@ -156,7 +157,7 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance -= ammount;
+            _balance -= ammount;
         }
         internal override void RecieveFunds(double ammount)
         {
@@ -177,7 +178,7 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance += ammount;
+            _balance += ammount;
         }
     }
 
@@ -194,7 +195,7 @@ namespace BenBank2Data
             BusinessOwner = DataStore.FinancialEntities.Find(x => x.Id.ToString() == reader[1].ToString());
             MyGovernment = BusinessOwner.MyGovernment;
             Name = reader[2].ToString().Trim();
-            Balance = Convert.ToDouble(reader[3]);
+            _balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("{0} business was loaded. It's Id = {1}. It operates from {2} It's balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
@@ -220,7 +221,7 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance -= ammount;
+            _balance -= ammount;
         }
         internal override void RecieveFunds(double ammount)
         {
@@ -241,7 +242,7 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance += ammount;
+            _balance += ammount;
         }
     }
 
@@ -253,7 +254,7 @@ namespace BenBank2Data
             BankOwner = DataStore.People.Find(x => x.Id.ToString() == reader[1].ToString());
             MyGovernment = BankOwner.MyGovernment;
             Name = reader[2].ToString().Trim();
-            Balance = Convert.ToDouble(reader[3]);
+            _balance = Convert.ToDouble(reader[3]);
             PositiveInterest = Convert.ToDouble(reader[4]);
             NegativeInterest = Convert.ToDouble(reader[5]);
             Debug.WriteLine(string.Format("{0} bank business was loaded. It's Id = {1}. It's government's Id = {2}. It's balance is {3}. It's positive interest rate is = {4}%. It's negative interest rate = {5}%", Name, Id, MyGovernment.Id, Balance.ToString("£0.00"), PositiveInterest, NegativeInterest));
@@ -272,7 +273,7 @@ namespace BenBank2Data
             AccountBank = DataStore.Banks.First(x => x.Id == (Guid)reader[1]);
             AccountHolder = DataStore.FinancialEntities.First(x => x.Id == (Guid)reader[2]);
             MyGovernment = AccountHolder.MyGovernment;
-            Balance = Convert.ToDouble(reader[3]);
+            _balance = Convert.ToDouble(reader[3]);
             Debug.WriteLine(string.Format("bank account was loaded. It's Id = {0}. It's bank is = {1}. It's account holder = {2}. It's balance is {3}.",  Id, AccountBank.Name, AccountHolder.Name, Balance.ToString("£0.00")));
         }
 
@@ -299,7 +300,8 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance -= ammount;
+            _balance -= ammount;
+            AccountBank.TakeFunds(ammount);
         }
         internal override void RecieveFunds(double ammount)
         {
@@ -320,7 +322,8 @@ namespace BenBank2Data
             {
                 throw ex;
             }
-            Balance += ammount;
+            _balance += ammount;
+            AccountBank.RecieveFunds(ammount);
         }
     }
 }
