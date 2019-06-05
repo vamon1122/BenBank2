@@ -107,8 +107,6 @@ namespace BenBank2Data
         public Person(SqlDataReader reader)
         {
             Id = (Guid)reader[0];
-            Debug.WriteLine(reader[0]);
-            Debug.WriteLine(reader[1]);
             foreach(Government g in DataStore.Governments)
             {
                 Debug.WriteLine(string.Format("Id = {0} name = {1}", g.Id, g.Name));
@@ -120,7 +118,20 @@ namespace BenBank2Data
             Debug.WriteLine(string.Format("{0} was loaded. Their Id = {1}. They live under {2}. Their balance is {3}", Name, Id, MyGovernment.Name, Balance.ToString("£0.00")));
         }
 
-        public override string Name { get { return string.Format("{0} {1}", Forename, Surname); } set { } }
+        public override string Name {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Surname))
+                {
+                    return Forename;
+                }
+                else
+                {
+                    return string.Format("{0} {1}", Forename, Surname);
+                }
+            }
+            set { }
+        }
         public string Forename { get; set; }
         public string Surname { get; set; }
 

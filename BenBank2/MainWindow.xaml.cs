@@ -29,15 +29,34 @@ namespace BenBank2
 
             InitializeComponent();
 
+            RefreshFilterOptions();
             RefreshFinancialEntities();
+        }
+
+        private void RefreshFilterOptions()
+        {
+            ComboBox_PayerSortGovernment.Items.Clear();
+            ComboBox_PayeeSortGovernment.Items.Clear();
+
+            foreach (Government government in DataStore.Governments.OrderBy(x => x.Name).ToList())
+            {
+                ComboBox_PayerSortGovernment.Items.Add(government.Name);
+                ComboBox_PayeeSortGovernment.Items.Add(government.Name);
+            }
         }
 
         private void RefreshFinancialEntities()
         {
-            Refresh(ListBox_Payers, ComboBox_PayerSort);
-            Refresh(ListBox_Payees, ComboBox_PayeeSort);
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
+        }
 
-            void Refresh(ListBox listOfFinancialEntities, ComboBox financialEntityGroup)
+        private void RefreshFinancialEntities(ListBox listOfFinancialEntities, ComboBox financialEntityGroup)
+        {
+
+            RefreshListBox();
+
+            void RefreshListBox()
             {
                 listOfFinancialEntities.Items.Clear();
 
@@ -48,9 +67,7 @@ namespace BenBank2
                 else
                     group = financialEntityGroup.SelectedValue.ToString().Split(':')[1].Trim();
 
-                List<FinancialEntity> financialEntities = GetFinancialEntitiesByGroup(group);
-
-                foreach (FinancialEntity financialEntity in financialEntities)
+                foreach (FinancialEntity financialEntity in GetFinancialEntitiesByGroup(group).OrderBy(x => x.Name).ToList())
                 {
                     listOfFinancialEntities.Items.Add(new UserControl_FinancialEntity(financialEntity));
                 }
@@ -58,7 +75,7 @@ namespace BenBank2
 
             List<FinancialEntity> GetFinancialEntitiesByGroup(string payerGroup)
             {
-                List<FinancialEntity> financialEntityGroup;
+                List<FinancialEntity> listOfFinancialEntity;
 
                 switch (payerGroup)
                 {
@@ -66,26 +83,26 @@ namespace BenBank2
                         Debug.WriteLine("People!");
                         //Derived class to base class:
                         //https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
-                        financialEntityGroup = DataStore.People.ConvertAll(x => (FinancialEntity)x);
+                        listOfFinancialEntity = DataStore.People.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Governments":
-                        financialEntityGroup = DataStore.Governments.ConvertAll(x => (FinancialEntity)x);
+                        listOfFinancialEntity = DataStore.Governments.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Businesses":
-                        financialEntityGroup = DataStore.Businesses.ConvertAll(x => (FinancialEntity)x);
+                        listOfFinancialEntity = DataStore.Businesses.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Banks":
-                        financialEntityGroup = DataStore.Banks.ConvertAll(x => (FinancialEntity)x);
+                        listOfFinancialEntity = DataStore.Banks.ConvertAll(x => (FinancialEntity)x);
                         break;
                     case "Bank Accounts":
-                        financialEntityGroup = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x);
+                        listOfFinancialEntity = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x);
                         break;
                     default:
-                        financialEntityGroup = DataStore.FinancialEntities;
+                        listOfFinancialEntity = DataStore.FinancialEntities;
                         break;
                 }
 
-                return financialEntityGroup;
+                return listOfFinancialEntity;
             }
 
             
@@ -194,6 +211,8 @@ namespace BenBank2
                             payeeNo = 0;
                         }
                         RefreshFinancialEntities();
+                        CheckBox_ApplyVAT.IsChecked = false;
+                        CheckBox_ApplyIncomeTax.IsChecked = false;
                     }
                     else
                     {
@@ -227,15 +246,24 @@ namespace BenBank2
             }
         }
 
-        private void ComboBox_PayerSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PayerFiltersChanged(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Payer sort 1 = " + ComboBox_PayerSort.Text);
-            RefreshFinancialEntities();
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
         }
 
-        private void ComboBox_PayeeSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PayerFiltersChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshFinancialEntities();
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
+        }
+
+        private void PayeeFiltersChanged(object sender, RoutedEventArgs e)
+        {
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
+        }
+
+        private void PayeeFiltersChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
         }
     }
 }
