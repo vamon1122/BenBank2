@@ -42,6 +42,8 @@ namespace BenBank2Data
 
     public class Government : FinancialEntity
     {
+        public Government() { }
+
         public Government(SqlDataReader reader)
         {
             Id = (Guid)reader[0];

@@ -26,21 +26,21 @@
             </Grid.RowDefinitions>
 
             <Label FontSize="30" HorizontalAlignment="Center">Payer(s)</Label>
-            <ComboBox Name="ComboBox_PayerSort" Grid.Row="1" SelectionChanged="PayerFiltersChanged">
+            <ComboBox Name="ComboBox_PayerType" Grid.Row="1" SelectionChanged="PayerFiltersChanged">
                 <ComboBoxItem>No Filter</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
                 <ComboBoxItem>Businesses</ComboBoxItem>
                 <ComboBoxItem>Banks</ComboBoxItem>
             </ComboBox>
-            <ComboBox Name="ComboBox_PayerSortGovernment" Grid.Row="2" SelectionChanged="PayerFiltersChanged" />
+            <ComboBox Name="ComboBox_PayerGovernment" Grid.Row="2" SelectionChanged="PayerFiltersChanged" SelectedValuePath="Id" DisplayMemberPath="Name" />
             <ScrollViewer Width="281" Grid.Row="4" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
                 <ListBox Name="ListBox_Payers" SelectionMode="Extended" SelectionChanged="ListBoxPayers_SelectedIndexChanged"  />
             </ScrollViewer>
             <CheckBox Name="CheckBox_PayerShowCash" Grid.Row="3" Content="Show cash" IsChecked="True" Click="PayerFiltersChanged" />
             <CheckBox Name="CheckBox_PayerShowBankAccounts" Grid.Row="3" HorizontalAlignment="Right" Content="Show bank accounts" IsChecked="True" Click="PayerFiltersChanged" />
             <Label FontSize="30" HorizontalAlignment="Center" Grid.Column="1">Payee(s)</Label>
-            <ComboBox Name="ComboBox_PayeeSort" Grid.Row="1" Grid.Column="1" SelectionChanged="PayeeFiltersChanged">
+            <ComboBox Name="ComboBox_PayeeType" Grid.Row="1" Grid.Column="1" SelectionChanged="PayeeFiltersChanged">
                 <ComboBoxItem>No Filter</ComboBoxItem>
                 <ComboBoxItem>People</ComboBoxItem>
                 <ComboBoxItem>Governments</ComboBoxItem>
@@ -48,7 +48,7 @@
                 <ComboBoxItem>Banks</ComboBoxItem>
                 <ComboBoxItem>Bank Accounts</ComboBoxItem>
             </ComboBox>
-            <ComboBox Name="ComboBox_PayeeSortGovernment" Grid.Column="1" Grid.Row="2" SelectionChanged="PayeeFiltersChanged" />
+            <ComboBox Name="ComboBox_PayeeGovernment" Grid.Column="1" Grid.Row="2" SelectionChanged="PayeeFiltersChanged" SelectedValuePath="Id" DisplayMemberPath="Name" />
             <CheckBox Name="CheckBox_PayeeShowCash" Grid.Column="1" Grid.Row="3" Content="Show cash" IsChecked="True" Click="PayeeFiltersChanged" />
             <CheckBox Name="CheckBox_PayeeShowBankAccounts" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Content="Show bank accounts" IsChecked="True" Click="PayeeFiltersChanged" />
             <ScrollViewer Width="281" Grid.Column="1" Grid.Row="4" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">

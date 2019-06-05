@@ -35,67 +35,109 @@ namespace BenBank2
 
         private void RefreshFilterOptions()
         {
-            ComboBox_PayerSortGovernment.Items.Clear();
-            ComboBox_PayeeSortGovernment.Items.Clear();
+            ComboBox_PayerGovernment.Items.Clear();
+            ComboBox_PayeeGovernment.Items.Clear();
+            
+            var noneSelected = new { Name = "None selected", Id = Guid.Empty };
+
+            ComboBox_PayerGovernment.Items.Add(noneSelected);
+            ComboBox_PayeeGovernment.Items.Add(noneSelected);
 
             foreach (Government government in DataStore.Governments.OrderBy(x => x.Name).ToList())
             {
-                ComboBox_PayerSortGovernment.Items.Add(government.Name);
-                ComboBox_PayeeSortGovernment.Items.Add(government.Name);
+                ComboBox_PayerGovernment.Items.Add(government);
+                ComboBox_PayeeGovernment.Items.Add(government);
             }
         }
 
         private void RefreshFinancialEntities()
         {
-            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
-            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerType, ComboBox_PayerGovernment, CheckBox_PayerShowCash, CheckBox_PayerShowBankAccounts);
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeType, ComboBox_PayeeGovernment, CheckBox_PayeeShowCash, CheckBox_PayeeShowBankAccounts);
         }
 
-        private void RefreshFinancialEntities(ListBox listOfFinancialEntities, ComboBox financialEntityGroup)
+        private void RefreshFinancialEntities(ListBox listbox_FinancialEntities, ComboBox comboBox_FinancialEntityGroup, ComboBox comboBox_FinancialEntityGovernment, CheckBox showCash, CheckBox showBankAccounts)
         {
 
             RefreshListBox();
 
             void RefreshListBox()
             {
-                listOfFinancialEntities.Items.Clear();
+                listbox_FinancialEntities.Items.Clear();
 
                 string group;
 
-                if (financialEntityGroup.SelectedValue == null)
+                if (comboBox_FinancialEntityGroup.SelectedValue == null)
                     group = "";
                 else
-                    group = financialEntityGroup.SelectedValue.ToString().Split(':')[1].Trim();
+                    group = comboBox_FinancialEntityGroup.SelectedValue.ToString().Split(':')[1].Trim();
 
-                foreach (FinancialEntity financialEntity in GetFinancialEntitiesByGroup(group).OrderBy(x => x.Name).ToList())
+                List<FinancialEntity> financialEntities;
+
+                if (comboBox_FinancialEntityGovernment.SelectedValue == null || comboBox_FinancialEntityGovernment.SelectedValue.ToString() == Guid.Empty.ToString())
                 {
-                    listOfFinancialEntities.Items.Add(new UserControl_FinancialEntity(financialEntity));
+                    financialEntities = GetFinancialEntitiesByGroup(group).OrderBy(x => x.Name).ToList();
+                }
+                else
+                {
+                    financialEntities = GetFinancialEntitiesByGroup(group).OrderBy(x => x.Name).ToList().Where(x => x.MyGovernment.Id.ToString() == comboBox_FinancialEntityGovernment.SelectedValue.ToString()).ToList();
+                }
+
+                foreach (FinancialEntity financialEntity in financialEntities)
+                {
+                    listbox_FinancialEntities.Items.Add(new UserControl_FinancialEntity(financialEntity));
                 }
             }
 
             List<FinancialEntity> GetFinancialEntitiesByGroup(string payerGroup)
             {
-                List<FinancialEntity> listOfFinancialEntity;
+                var listOfFinancialEntity = new List<FinancialEntity>();
 
                 switch (payerGroup)
                 {
                     case "People":
-                        Debug.WriteLine("People!");
-                        //Derived class to base class:
-                        //https://stackoverflow.com/questions/1817300/convert-listderivedclass-to-listbaseclass
-                        listOfFinancialEntity = DataStore.People.ConvertAll(x => (FinancialEntity)x);
+                        if ((bool)showCash.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.People);
+                        }
+
+                        if ((bool)showBankAccounts.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.People.Contains(x.AccountHolder)));
+                        }
                         break;
                     case "Governments":
-                        listOfFinancialEntity = DataStore.Governments.ConvertAll(x => (FinancialEntity)x);
+                        if ((bool)showCash.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.Governments);
+                        }
+
+                        if ((bool)showBankAccounts.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Governments.Contains(x.AccountHolder)));
+                        }
                         break;
                     case "Businesses":
-                        listOfFinancialEntity = DataStore.Businesses.ConvertAll(x => (FinancialEntity)x);
+                        if ((bool)showCash.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.Businesses);
+                        }
+
+                        if ((bool)showBankAccounts.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Businesses.Contains(x.AccountHolder)));
+                        }
                         break;
                     case "Banks":
-                        listOfFinancialEntity = DataStore.Banks.ConvertAll(x => (FinancialEntity)x);
-                        break;
-                    case "Bank Accounts":
-                        listOfFinancialEntity = DataStore.BankAccounts.ConvertAll(x => (FinancialEntity)x);
+                        if ((bool)showCash.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.Banks);
+                        }
+
+                        if ((bool)showBankAccounts.IsChecked)
+                        {
+                            listOfFinancialEntity.AddRange(DataStore.BankAccounts.Where(x => DataStore.Banks.Contains(x.AccountHolder)));
+                        }
                         break;
                     default:
                         listOfFinancialEntity = DataStore.FinancialEntities;
@@ -104,12 +146,7 @@ namespace BenBank2
 
                 return listOfFinancialEntity;
             }
-
-            
-
-            
         }
-
         
         private void ListBoxPayers_SelectedIndexChanged(object sender, System.EventArgs e)
         {
@@ -248,22 +285,22 @@ namespace BenBank2
 
         private void PayerFiltersChanged(object sender, RoutedEventArgs e)
         {
-            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerType, ComboBox_PayerGovernment, CheckBox_PayerShowCash, CheckBox_PayerShowBankAccounts);
         }
 
         private void PayerFiltersChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerSort);
+            RefreshFinancialEntities(ListBox_Payers, ComboBox_PayerType, ComboBox_PayerGovernment, CheckBox_PayerShowCash, CheckBox_PayerShowBankAccounts);
         }
 
         private void PayeeFiltersChanged(object sender, RoutedEventArgs e)
         {
-            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeType, ComboBox_PayeeGovernment, CheckBox_PayeeShowCash, CheckBox_PayeeShowBankAccounts);
         }
 
         private void PayeeFiltersChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeSort);
+            RefreshFinancialEntities(ListBox_Payees, ComboBox_PayeeType, ComboBox_PayeeGovernment, CheckBox_PayeeShowCash, CheckBox_PayeeShowBankAccounts);
         }
     }
 }
